@@ -65,7 +65,9 @@ class ArticleController extends Controller
     //执行删除文章
     public function delete(Request $request){
         $params = $request->all();
-        $result = DB::table('article')->where('id', '=', $params['id'])->delete();
+        $result = DB::table('article')
+                ->where('id', '=', $params['id'])
+                ->delete();
         return $this->message($result);
     }
 
