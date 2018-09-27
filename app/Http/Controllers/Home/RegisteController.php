@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 
 class RegisteController extends Controller
-{
+{   
+    
     //呈递注册页面
     public function index(){
     	return view('Home.registe.registe');

@@ -9,24 +9,45 @@ use Illuminate\Support\Facades\DB;
 
 class ArticleController extends Controller
 {   
+    
     //呈递后台首页
     public function index(){
+        //判断是否登录
+        $result = $this->chechSession();
+        if($result){
+            return redirect('/Home/Login/index');
+        }
     	return view('Home.article.index');
     }
 
     //呈递文章列表页
     public function list(){
+        //判断是否登录
+        $result = $this->chechSession();
+        if($result){
+            return redirect('/Home/Login/index');
+        }
         $data = DB::table('article')->paginate(10);
         return view('Home.article.list',['articles'=>$data]);
     }
 
     //呈递文章添加页
     public function add(Request $request){
+        //判断是否登录
+        $result = $this->chechSession();
+        if($result){
+            return redirect('/Home/Login/index');
+        }
     	return view('Home.article.add');
     }
 
     //执行添加
     public function insert(Request $request){
+        //判断是否登录
+        $result = $this->chechSession();
+        if($result){
+            return redirect('/Home/Login/index');
+        }
     	$params = $request->all();
     	//校验数据
     	if((!$params['title']) || (!$params['content'])){
@@ -34,17 +55,16 @@ class ArticleController extends Controller
     		return json_encode($result);
     	}
     	$insertResult = DB::insert('insert into article (title, content) values (?, ?)', [$params['title'], $params['content']]);
-    	if($insertResult){
-    		$result = array('code' => 200);
-    		return json_encode($result);
-    	}else{
-    		$result = array('code' => 400);
-    		return json_encode($result);
-    	}
+        return $this->message($insertResult);
     }
 
     //获取具体文章信息
     public function getSpecific(Request $request){
+        //判断是否登录
+        $result = $this->chechSession();
+        if($result){
+            return redirect('/Home/Login/index');
+        }
         $params = $request->all();
         $result = DB::table('article')
                     ->where('id', '=', $params['id'])
@@ -54,6 +74,11 @@ class ArticleController extends Controller
 
     //执行修改文章
     public function edit(Request $request){
+        //判断是否登录
+        $result = $this->chechSession();
+        if($result){
+            return redirect('/Home/Login/index');
+        }
         $params = $request->all();
         //校验数据
         if((!$params['title']) || (!$params['content'])){
@@ -63,19 +88,36 @@ class ArticleController extends Controller
         $result = DB::table('article')
             ->where('id', $params['id'])
             ->update(['title' => $params['title'],'content' => $params['content']]);
-        if($result){
-            $result = array('code' => 200);
-            return json_encode($result);
-        }else{
-            $result = array('code' => 400);
-            return json_encode($result);
-        }
+        return $this->message($result);
+        
     }
 
     //执行删除文章
     public function delete(Request $request){
+        //判断是否登录
+        $result = $this->chechSession();
+        if($result){
+            return redirect('/Home/Login/index');
+        }
         $params = $request->all();
         $result = DB::table('article')->where('id', '=', $params['id'])->delete();
+        return $this->message($result);
+    }
+
+
+
+    //判断session
+    public function chechSession(){
+        $userInfo = session('userInfo');
+        if($userInfo == null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    //判断操作状态
+    public function message($result){
         if($result){
             $result = array('code' => 200);
             return json_encode($result);

@@ -11,7 +11,7 @@ class LoginController extends Controller
 {
     //呈递登陆页面
     public function index(){
-    	Session::forget('userInfo');
+    	// Session::forget('userInfo');
     	$userInfo = Session::get('userInfo');
     	if($userInfo){
     		return redirect('/Home/Article/index');
