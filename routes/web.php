@@ -34,28 +34,30 @@ Route::post('/Home/Login/checkInfo','Home\LoginController@checkInfo');
 Route::get('/Home/Login/logOut','Home\LoginController@logOut');
 
 
+//路由组
+Route::group(['middleware' => ['checklogin']], function () {
+	//呈递后台首页
+	Route::get('/Home/Article/index','Home\ArticleController@index');
 
-//呈递后台首页
-Route::get('/Home/Article/index','Home\ArticleController@index');
+	//呈递文章列表页
+	Route::get('/Home/Article/list','Home\ArticleController@list');
 
-//呈递文章列表页
-Route::get('/Home/Article/list','Home\ArticleController@list');
+	//呈递文章添加页
+	Route::get('/Home/Article/add','Home\ArticleController@add');
 
-//呈递文章添加页
-Route::get('/Home/Article/add','Home\ArticleController@add');
+	//执行添加文章
+	Route::post('/Home/Article/insert','Home\ArticleController@insert');
 
-//执行添加文章
-Route::post('/Home/Article/insert','Home\ArticleController@insert');
+	//获取具体文章信息
+	Route::get('/Home/Article/getSpecific','Home\ArticleController@getSpecific');
 
-//获取具体文章信息
-Route::get('/Home/Article/getSpecific','Home\ArticleController@getSpecific');
+	//执行修改文章
+	Route::post('/Home/Article/edit','Home\ArticleController@edit');
 
-//执行修改文章
-Route::post('/Home/Article/edit','Home\ArticleController@edit');
+	//执行删除文章
+	Route::get('/Home/Article/delete','Home\ArticleController@delete');
 
-//执行删除文章
-Route::get('/Home/Article/delete','Home\ArticleController@delete');
-
+});
 
 
 
